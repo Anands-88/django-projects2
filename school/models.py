@@ -1,11 +1,18 @@
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 class Parent(models.Model):
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    phone = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    phone = PhoneNumberField()
+
+    def __str__(self):
+        return self.first_name
 
 class Contribution(models.Model):
-    Type = models.CharField(max_length=20)
-    parent = models.ManyToManyField(Parent)
-    
+    contributions = models.CharField(max_length=255)
+    parents = models.ManyToManyField(Parent)
+
+    def __str__(self):
+        return self.contributions
