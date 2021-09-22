@@ -15,20 +15,20 @@ class ParentAPITest(TestCase):
     def setUp(self):
         super().setUp()
         self.parent_instance = Parent.objects.create(
-          first_name="Jane", last_name="Smith", phone="+41524204242"
+          id = 2, first_name="Jane", last_name="Smith", phone="+41524204242"
         )
 
     def test_list(self):
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, 200)
         expected_response = [
-            {   "id" : 3,
+
+            {   "id" : 2,
                 "first_name": "Jane",
-                "last_name": "Smith",
-                "phone" : "+41524204242"
-            }
+                "last_name" : "Smith",
+                "phone" : "+41524204242" }
         ]
-        self.assertEqual(response.json(), expected_response)
+        self.assertEqual(response.json(), expected_response)    
 
 #    def test_paginated(self):
 #         response = self.client.get(
@@ -56,9 +56,9 @@ class ParentAPITest(TestCase):
 
     def test_create(self):
         expected_response = {
-            "id" : 2,
-            "first_name" : "Jane",
-            "last_name" : "Smith",
+            "id" : 1,
+            "first_name" : "James",
+            "last_name" : "Henry",
             "phone" : "+41524204242"
         }
         response = self.client.post(
@@ -67,35 +67,42 @@ class ParentAPITest(TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.json(), expected_response)
 
-    # def test_update(self):
-    #     # PUT
-    #     data = {
-    #         "label": "ECOMMERCE",
-    #         "value": "Ecommerce"
-    #     }
-    #     response = self.client.put(
-    #         f"{self.list_url}{self.default_instance.uuid}/",
-    #         data=data
-    #     )
-    #     self.assertEqual(response.status_code, 404)
 
-    #     # PATCH
-    #     data = {
-    #         "label": "ECOMMERCE",
-    #         "value": "Ecommerce"
-    #     }
-    #     response = self.client.patch(
-    #         self.client.get(f"{self.list_url}{self.default_instance.uuid}/"),
-    #         data=data
-    #     )
-    #     self.assertEqual(response.status_code, 404)
+    def test_update(self):
+        # PUT
+        data = {
+            "id" : 5,
+            "first_name": "Rob",
+            "last_name": "Green",
+            "phone" : "+41294596883"
+        }
+        response = self.client.put(
+            f"{self.list_url}{self.parent_instance}/",
+            data=data
+        )
+        self.assertEqual(response.status_code, 404)
 
-    # def test_destroy(self):
-    #     # DELETE
-    #     response = self.client.delete(
-    #         f"{self.list_url}{self.default_instance.uuid}/",
-    #     )
-    #     self.assertEqual(response.status_code, 404)
+        # PATCH
+        data = {
+            "id" : 1,
+            "first_name": "James",
+            "last_name": "Smith",
+            "phone" : "+48475924784"
+            
+        }
+        response = self.client.patch(
+            self.client.get(f"{self.list_url}{self.parent_instance}/"),
+            data=data
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_destroy(self):
+        # DELETE
+        response = self.client.delete(
+            f"{self.list_url}{self.parent_instance}/",
+        )
+        self.assertEqual(response.status_code, 404)
+
 
 # import xlsxwriter
 # import pandas as pd
