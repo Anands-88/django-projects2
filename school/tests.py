@@ -6,7 +6,7 @@ class ParentAPITest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.list_url = reverse('parent list')
+        cls.list_url = reverse('parent-list')
         # cls.paginated_url = reverse('presets:industry-type-option-paginated')
         cls.model = Parent
         cls.queryset = cls.model.objects.all()
@@ -48,15 +48,14 @@ class ParentAPITest(TestCase):
 #         }
 #         self.assertEqual(response.json(), expected_response)
 
-    # def test_detail(self):
-    #     response = self.client.get(
-    #         f"{self.list_url}{self.default_instance.uuid}/"
-    #     )
-    #     self.assertEqual(response.status_code, 404)
+    def test_detail(self):
+        response = self.client.get(
+            f"{self.list_url}{self.parent_instance}/"
+        )
+        self.assertEqual(response.status_code, 404)
 
     def test_create(self):
         expected_response = {
-            "id" : 1,
             "first_name" : "James",
             "last_name" : "Henry",
             "phone" : "+41524204242"
@@ -64,7 +63,9 @@ class ParentAPITest(TestCase):
         response = self.client.post(
             self.list_url, data=expected_response
         )
+        response.json().pop('id')
         self.assertEqual(response.status_code, 201)
+        # self.maxDiff = None
         self.assertEqual(response.json(), expected_response)
 
 
